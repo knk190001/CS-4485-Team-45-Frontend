@@ -1,0 +1,16 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - npm ci
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - echo Clearing asset bucket
+      - aws s3 rm "s3://$ASSET_BUCKET_NAME/" --recursive
+      - echo Uploading assets
+      - aws s3 cp ./dist s3://$ASSET_BUCKET_NAME/ --recursive
+      - echo Triggering docker image rebuild
+      - aws codebuild start-build --project-name $SERVER_PROJECT_NAME
