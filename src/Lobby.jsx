@@ -1,8 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import photo from "./logo.png";
+import {useContext} from "react";
+import {PrefixContext} from "./index.jsx";
 
 function Lobby() {
   const navigate = useNavigate();
+  const prefix = useContext(PrefixContext);
 
   const startGame = async () => {
     const request = {
@@ -16,7 +19,7 @@ function Lobby() {
     };
 
     try {
-      const response = await fetch("/api/game/start", requestOptions);
+      const response = await fetch(`${prefix}/api/game/start`, requestOptions);
       const data = await response.json();
       // Assuming the server redirects to the game state page or something similar
       if (response.ok) {

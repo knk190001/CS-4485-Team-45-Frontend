@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useMemo, useContext} from "react";
 
 import blue0 from "./cardImgs/blue-0-card-clipart-md.png";
 import blue1 from "./cardImgs/blue-1-card-clipart-md.png";
@@ -57,6 +57,9 @@ import yellow9 from "./cardImgs/yellow-9-card-clipart-md.png";
 import yellowDraw2 from "./cardImgs/yellow-draw-two-card-clipart-md.png";
 import yellowrev from "./cardImgs/yellow-reverse-card-clipart-md.png";
 import yellowskip from "./cardImgs/yellow-skip-card-clipart-md.png";
+import {useGameState} from "./GameStateRoot.jsx";
+import {usePlayerName} from "./cardImgs/PlayerNameRoot.jsx";
+import {PrefixContext} from "./index.jsx";
 
 const redCards = [
   red0,
@@ -123,37 +126,29 @@ const yellowCards = [
 ];
 
 export default function Hand() {
-  const [cards, setCards] = useState([]);
+  // const [cards, setCards] = useState([]);
+  const playerName = usePlayerName();
+  const gamestate = useGameState();
+  const prefix = useContext(PrefixContext);
 
-  useEffect(() => {
-    const fetchGameState = async () => {
-      const response = await fetch("/api/game/getGameState", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (response.ok) {
-        const gameState = await response.json();
-        // Assuming gameState includes a currentPlayer property with a hand array
-        const currentPlayer = gameState.currentPlayer;
-        if (currentPlayer && currentPlayer.hand) {
-          setCards(currentPlayer.hand);
-        }
-      } else {
-        console.error("Failed to fetch the game state:", response.status);
+  const cards = useMemo(() => {
+    if(gamestate === null) {return [];}
+    const players = gamestate.players;
+    let current = null;
+    players.forEach(player => {
+      if(player.username === playerName){
+        current = player;
       }
-    };
-
-    fetchGameState();
-  }, []);
+    });
+    return current.hand;
+  }, [gamestate, playerName]);
 
   return <div id="theirHand">
     {cards.map((card, index) => <button
         key={index}
         className="handCards"
         title="play card"
-        onClick={() => playCard(index)}
+        onClick={() => playCard(card.id)}
       >
         <img src={getImageForCard(card)} width={100} />
       </button>)}
@@ -161,7 +156,7 @@ export default function Hand() {
 
   // when card clicked, connects to playcard endpoint in backend
   async function playCard(cardId) {
-    const response = await fetch(`/api/game/playCard/${cardId}`, {
+    const response = await fetch(`${prefix}/api/game/playCard/${cardId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

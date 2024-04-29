@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useMemo} from "react";
 
 import blue0 from "./cardImgs/blue-0-card-clipart-md.png";
 import blue1 from "./cardImgs/blue-1-card-clipart-md.png";
@@ -57,6 +57,7 @@ import yellow9 from "./cardImgs/yellow-9-card-clipart-md.png";
 import yellowDraw2 from "./cardImgs/yellow-draw-two-card-clipart-md.png";
 import yellowrev from "./cardImgs/yellow-reverse-card-clipart-md.png";
 import yellowskip from "./cardImgs/yellow-skip-card-clipart-md.png";
+import {useGameState} from "./GameStateRoot.jsx";
 
 const redCards = [
   red0,
@@ -123,32 +124,14 @@ const yellowCards = [
 ];
 
 export default function Top() {
+  const gameState = useGameState()
   const [topCard, setTopCard] = useState(null);
 
-  useEffect(() => {
-    const fetchTopCard = async () => {
-      try {
-        const response = await fetch("/api/game/getGameState", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.ok) {
-          const gameState = await response.json();
-          // Extract the top card from the gameState
-          const topCard = gameState.pile;
-          setTopCard(topCard);
-        } else {
-          console.error("Failed to fetch the game state:", response.status);
-        }
-      } catch (error) {
-        console.error("Error while fetching game state:", error);
-      }
-    };
-
-    fetchTopCard();
-  }, []);
+  useMemo(() => {
+    if (gameState !== null) {
+      setTopCard(gameState.pile)
+    }
+  }, [gameState])
 
   return <div id="topCard">
     {topCard && <img src={getImageForCard(topCard)} width={140} />}

@@ -7,6 +7,8 @@ import Instructions from "./Instructions.jsx";
 import Welcome from "./Welcome.jsx";
 import Game from "./MainGame.jsx";
 
+
+
 export default function App() {
   return (
     <div className="App">
