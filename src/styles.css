@@ -1,0 +1,250 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap");
+
+.App {
+  font-family: "Cabin", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  text-align: center;
+  max-height: 100vh;
+  padding: 20px;
+}
+
+.altTitle {
+  font-size: 2.5em;
+}
+
+body {
+  font-family: "Cabin", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.link-button {
+  background-color: #007bff; /* Blue */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-decoration: none; /* Ensuring links styled as buttons don't get underlined */
+  display: inline-block; /* Necessary for links to behave like buttons */
+}
+
+.link-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  opacity: 0.9;
+}
+
+#welcomeScreen {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-image: radial-gradient(circle at center, #004d40 0%, #00251a 100%);
+}
+
+#lobbyImg {
+  width: 30%;
+  position: absolute;
+  top: 26%;
+  left: 18%;
+}
+
+.lobbyContent {
+  position: absolute;
+  width: 15%;
+  left: 56%;
+  top: 27%;
+}
+
+.lobby {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-image: radial-gradient(circle at center, #004d40 0%, #00251a 100%);
+  border-radius: 10px;
+  padding: 40px 20px;
+  margin-bottom: 20px;
+  color: white; /* Ensuring text visibility */
+}
+
+.lobbyBttns {
+  background-color: #007bff;
+  margin: 30px;
+  color: #ffee00;
+  font-family: "Cabin", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+h1 {
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: black;
+  font-size: 4em;
+  color: #ffee00;
+}
+
+.lobbyBttns:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  opacity: 0.9;
+}
+
+.card {
+  text-align: left;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+  padding: 20px;
+  margin: auto;
+  width: 80%;
+  color: black; /* Explicitly setting text color for content within cards */
+}
+
+table {
+  width: 100%;
+  margin: 20px 0;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+#interface {
+}
+
+#drawPile {
+  position: absolute;
+  padding-top: 0px;
+  padding-left: 0px;
+  width: 130px;
+  height: 200px;
+  left: 37%;
+  top: 25%;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+.handCards {
+  padding-top: 0px;
+  padding-left: 0px;
+  margin-right: 15px;
+  width: 100px;
+  height: 145px;
+  cursor: pointer;
+  border-radius: 36px;
+  border-color: white;
+}
+
+#gametable {
+  position: absolute;
+  background-image: linear-gradient(#04631d, #10a336, #04631d);
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 70%;
+  border-radius: 35px;
+}
+
+.gameBttns {
+  font-family: "Cabin", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  bottom: 0;
+  right: 0;
+  background-color: #007bff; /* Blue */
+  color: white;
+  border-color: white;
+  padding: 20px 30px;
+  margin-top: 25%;
+  margin-left: 20px;
+  width: 100px;
+  height: 60px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  text-decoration: none; /* Ensuring links styled as buttons don't get underlined */
+  display: inline-block; /* Necessary for links to behave like buttons */
+}
+
+#gameBttnArea {
+  background-image: linear-gradient(to right, white, #c9c9c9);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 30%;
+  width: 20%;
+}
+
+#playersHand {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 30%;
+  width: 80%;
+  background-image: radial-gradient(#ffffff, #c9c9c9, #ffffff);
+}
+
+#theirHand {
+  padding-top: 5%;
+}
+
+.modal {
+  background-color: rgba(192, 192, 192, 0.9);
+}
+
+#livefeed {
+  position: absolute;
+  top: 0;
+  color: black;
+  right: 0;
+  width: 20%;
+  height: 70%;
+  text-align: left;
+  background-image: linear-gradient(to right, white, yellow);
+}
+
+#topCard {
+  position: absolute;
+  left: 52%;
+  top: 25%;
+}
+
+#welcomeLogo {
+  position: absolute;
+  width: 30%;
+  left: 35%;
+  top: 10%;
+}
+
+#usernameForm {
+  position: absolute;
+  text-align: center;
+  top: 60%;
+  width: 50%;
+  left: 25%;
+}
