@@ -1,10 +1,10 @@
-import { Route, Routes, Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import logo from "./logo.png";
+import {useNavigate} from "react-router-dom";
 
 export default function Welcome() {
   const [player, setPlayer] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -17,7 +17,8 @@ export default function Welcome() {
       });
       if (response.ok) {
         const result = await response.text();
-        console.log(result); // Log or handle the response from the server
+        console.log(result);// Log or handle the response from the server
+        navigate("/lobby")
         // Redirect to lobby or do something else as needed
       } else {
         console.error("Failed to join lobby:", response.status);
