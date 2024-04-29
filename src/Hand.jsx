@@ -58,6 +58,70 @@ import yellowDraw2 from "./cardImgs/yellow-draw-two-card-clipart-md.png";
 import yellowrev from "./cardImgs/yellow-reverse-card-clipart-md.png";
 import yellowskip from "./cardImgs/yellow-skip-card-clipart-md.png";
 
+const redCards = [
+  red0,
+  red1,
+  red2,
+  red3,
+  red4,
+  red5,
+  red6,
+  red7,
+  red8,
+  red9,
+  redDraw2, // index 10: Draw two
+  redrev, // index 11: Reverse
+  redskip, // index 12: Skip
+];
+
+const blueCards = [
+  blue0,
+  blue1,
+  blue2,
+  blue3,
+  blue4,
+  blue5,
+  blue6,
+  blue7,
+  blue8,
+  blue9,
+  blueDraw2, // index 10: Draw two
+  bluerev, // index 11: Reverse
+  blueskip, // index 12: Skip
+];
+
+const greenCards = [
+  green0,
+  green1,
+  green2,
+  green3,
+  green4,
+  green5,
+  green6,
+  green7,
+  green8,
+  green9,
+  greenDraw2, // index 10: Draw two
+  greenrev, // index 11: Reverse
+  greenskip, // index 12: Skip
+];
+
+const yellowCards = [
+  yellow0,
+  yellow1,
+  yellow2,
+  yellow3,
+  yellow4,
+  yellow5,
+  yellow6,
+  yellow7,
+  yellow8,
+  yellow9,
+  yellowDraw2, // index 10: Draw two
+  yellowrev, // index 11: Reverse
+  yellowskip, // index 12: Skip
+];
+
 export default function Hand() {
   const [cards, setCards] = useState([]);
 
@@ -167,69 +231,5 @@ export default function Hand() {
         }
       }
     }
-
-    const redCards = [
-      red0,
-      red1,
-      red2,
-      red3,
-      red4,
-      red5,
-      red6,
-      red7,
-      red8,
-      red9,
-      redDraw2, // index 10: Draw two
-      redrev, // index 11: Reverse
-      redskip, // index 12: Skip
-    ];
-
-    const blueCards = [
-      blue0,
-      blue1,
-      blue2,
-      blue3,
-      blue4,
-      blue5,
-      blue6,
-      blue7,
-      blue8,
-      blue9,
-      blueDraw2, // index 10: Draw two
-      bluerev, // index 11: Reverse
-      blueskip, // index 12: Skip
-    ];
-
-    const greenCards = [
-      green0,
-      green1,
-      green2,
-      green3,
-      green4,
-      green5,
-      green6,
-      green7,
-      green8,
-      green9,
-      greenDraw2, // index 10: Draw two
-      greenrev, // index 11: Reverse
-      greenskip, // index 12: Skip
-    ];
-
-    const yellowCards = [
-      yellow0,
-      yellow1,
-      yellow2,
-      yellow3,
-      yellow4,
-      yellow5,
-      yellow6,
-      yellow7,
-      yellow8,
-      yellow9,
-      yellowDraw2, // index 10: Draw two
-      yellowrev, // index 11: Reverse
-      yellowskip, // index 12: Skip
-    ];
   }
 }
