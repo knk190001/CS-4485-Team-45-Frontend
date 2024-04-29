@@ -64,7 +64,7 @@ export default function Top() {
   useEffect(() => {
     const fetchTopCard = async () => {
       try {
-        const response = await fetch("/game/getGameState", {
+        const response = await fetch("/api/game/getGameState", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
