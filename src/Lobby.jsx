@@ -23,10 +23,7 @@ function Lobby() {
       const response = await fetch(`${prefix}/api/game/start`, requestOptions);
       const data = await response.json();
       // Assuming the server redirects to the game state page or something similar
-      if (response.ok) {
-        // Use React Router's history to navigate
-        navigate("/game");
-      } else {
+      if (!response.ok) {
         // Handle errors or unsuccessful start
         console.error("Failed to start game:", data);
         alert("Error starting game. Please try again.");
@@ -44,9 +41,9 @@ function Lobby() {
           <img src={photo} id="lobbyImg"/>
           <div className="lobbyContent">
             <button className="lobbyBttns" onClick={startGame}>
-              <Link to="/game" className="link-button" style={{color: "white"}}>
+              <a  className="link-button" style={{color: "white"}}>
                 Start Game
-              </Link>
+              </a>
             </button>
             <button className="lobbyBttns">
               <Link

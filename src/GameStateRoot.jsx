@@ -19,18 +19,16 @@ export default function GameStateRoot(props) {
     gameState: null
   });
   const prefix = useContext(PrefixContext);
-  updateState().then();
-
 
   useEffect(()=> {
     const events = new EventSource(`${prefix}/api/game/events`);
+    updateState().then();
 
     events.onmessage = async (evt) => {
       console.log(evt)
       const data = JSON.parse(evt.data);
       if (data === "START") {
         navigate("/game");
-        await updateState();
       } else if (data === "UPDATE") {
         await updateState();
       } else if(data === "RESET") {

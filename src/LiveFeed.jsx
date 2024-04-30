@@ -4,7 +4,7 @@ export default function LiveFeed() {
     const gamestate = useGameState();
     const currentPlayer = (gamestate || {}).currentPlayer;
     const currentPlayerIndex = (gamestate || { players:[]}).players.flatMap((player, index) => {
-        if (player.username === currentPlayer.username) {
+        if ((player || {}).username === (currentPlayer || {}).username) {
             return [index];
         }
         return [];
