@@ -5,17 +5,26 @@ import {PrefixContext} from "./index.jsx";
 const GameStateContext = createContext(null);
 
 export function useGameState() {
-  return useContext(GameStateContext);
+  return useContext(GameStateContext).gameState;
+}
+
+export function useManualUpdate() {
+  return useContext(GameStateContext).manualUpdate
 }
 
 export default function GameStateRoot(props) {
   const navigate = useNavigate();
-  let [gameState, setGameState] = useState(null);
+  let [gameState, setGameState] = useState({
+    manualUpdate: async () => await updateState(),
+    gameState: null
+  });
   const prefix = useContext(PrefixContext);
+  updateState().then();
 
 
   useEffect(()=> {
     const events = new EventSource(`${prefix}/api/game/events`);
+
     events.onmessage = async (evt) => {
       console.log(evt)
       const data = JSON.parse(evt.data);
@@ -24,10 +33,18 @@ export default function GameStateRoot(props) {
         await updateState();
       } else if (data === "UPDATE") {
         await updateState();
-      } else if (data === "END") {
+      } else if(data === "RESET") {
+        navigate("/");
+        setGameState(null)
+      }else if (data === "END") {
         //TODO
       }
     }
+
+    return () => {
+      events.close();
+    };
+
   }, []);
 
   async function updateState() {
@@ -41,7 +58,10 @@ export default function GameStateRoot(props) {
       if (response.ok) {
         const newGameState = await response.json();
         console.log(newGameState);
-        setGameState(newGameState)
+        setGameState({
+          ...gameState,
+          gameState: newGameState
+        });
       } else {
         console.error("Failed to fetch the game state:", response.status);
       }

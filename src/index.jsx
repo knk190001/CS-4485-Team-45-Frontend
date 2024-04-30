@@ -13,11 +13,9 @@ export const PrefixContext = createContext(window.location.href.includes("localh
 root.render(
   <StrictMode>
     <BrowserRouter>
-      <GameStateRoot>
         <PlayerNameProvider>
           <App/>
         </PlayerNameProvider>
-      </GameStateRoot>
     </BrowserRouter>
   </StrictMode>
 );

@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import photo from "./logo.png";
 import {useContext} from "react";
 import {PrefixContext} from "./index.jsx";
+import GameStateRoot from "./GameStateRoot.jsx";
 
 function Lobby() {
   const navigate = useNavigate();
@@ -37,35 +38,37 @@ function Lobby() {
   };
 
   return (
-    <div className="lobby">
-      <h1>Welcome to the UNO Online Multiplayer Game</h1>
-      <img src={photo} id="lobbyImg" />
-      <div className="lobbyContent">
-        <button className="lobbyBttns" onClick={startGame}>
-          <Link to="/game" className="link-button" style={{ color: "white" }}>
-            Start Game
-          </Link>
-        </button>
-        <button className="lobbyBttns">
-          <Link
-            to="/instructions"
-            className="link-button"
-            style={{ color: "white" }}
-          >
-            Instructions
-          </Link>
-        </button>
-        <button className="lobbyBttns">
-          <Link
-            to="/leaderboard"
-            className="link-button"
-            style={{ color: "white" }}
-          >
-            Leaderboard
-          </Link>
-        </button>
-      </div>
-    </div>
+      <GameStateRoot>
+        <div className="lobby">
+          <h1>Welcome to the UNO Online Multiplayer Game</h1>
+          <img src={photo} id="lobbyImg"/>
+          <div className="lobbyContent">
+            <button className="lobbyBttns" onClick={startGame}>
+              <Link to="/game" className="link-button" style={{color: "white"}}>
+                Start Game
+              </Link>
+            </button>
+            <button className="lobbyBttns">
+              <Link
+                  to="/instructions"
+                  className="link-button"
+                  style={{color: "white"}}
+              >
+                Instructions
+              </Link>
+            </button>
+            <button className="lobbyBttns">
+              <Link
+                  to="/leaderboard"
+                  className="link-button"
+                  style={{color: "white"}}
+              >
+                Leaderboard
+              </Link>
+            </button>
+          </div>
+        </div>
+      </GameStateRoot>
   );
 }
 
