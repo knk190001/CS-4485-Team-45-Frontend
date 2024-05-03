@@ -1,4 +1,56 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+function Leaderboard() {
+  const [leaderboardData, setLeaderboardData] = useState([]);
+
+  useEffect(() => {
+    fetchLeaderboardData();
+  }, []);
+
+  const fetchLeaderboardData = async () => {
+    try {
+      const response = await fetch("/game/getWins");
+      const data = await response.json();
+      // Assuming the response data is an array of objects with player names and win counts
+      setLeaderboardData(data);
+    } catch (error) {
+      console.error("Error fetching leaderboard data:", error);
+    }
+  };
+
+  return (
+    <div className="card">
+      <h1>Leaderboard</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Win Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaderboardData.map((player, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{player.name}</td>
+              <td>{player.wins}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Link to="/lobby">
+        <button className="home-button">Home</button>
+      </Link>
+    </div>
+  );
+}
+
+export default Leaderboard;
+
+/*
+import { Link } from "react-router-dom";
 
 function Leaderboard() {
   return (
@@ -43,3 +95,4 @@ function Leaderboard() {
 }
 
 export default Leaderboard;
+*/
