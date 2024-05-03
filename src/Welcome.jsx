@@ -1,51 +1,62 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import logo from "./logo.png";
-import {useNavigate} from "react-router-dom";
-import {usePlayerState} from "./cardImgs/PlayerNameRoot.jsx";
-import {PrefixContext} from "./index.jsx";
+import { useNavigate } from "react-router-dom";
+import { PrefixContext } from "./index.jsx";
 
 export default function Welcome() {
-  const [player, setPlayer] = useState("");
-  const playerState = usePlayerState();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const prefix = useContext(PrefixContext);
   const navigate = useNavigate();
-  const handleSubmit = async (event) => {
+
+  const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${prefix}/api/lobby/join/${player}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${prefix}/api/login/${username}/${password}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (response.ok) {
-        const result = await response.text();
-        playerState.setPlayerName(player);
-        navigate("/lobby")
-        console.log(result);// Log or handle the response from the server
-        // Redirect to lobby or do something else as needed
+        navigate("/lobby"); // Assuming the server handles session or token authentication
+        console.log("Login successful."); // Log success or handle accordingly
       } else {
-        console.error("Failed to join lobby:", response.status);
+        console.error("Login failed:", response.status);
+        alert("Failed to log in. Please try again.");
       }
     } catch (error) {
-      console.error("Error while joining lobby:", error);
+      console.error("Error while logging in:", error);
+      alert("Please try again.");
     }
-  };
-
-  const handlePlayerChange = (event) => {
-    setPlayer(event.target.value);
   };
 
   return (
     <div id="welcomeScreen">
       <img src={logo} alt="Logo" id="welcomeLogo" />
       <div id="usernameForm">
-        <h1>Enter your name to play:</h1>
-        <form onSubmit={handleSubmit}>
-          <input name="query" value={player} onChange={handlePlayerChange} />
+        <h1>Login to Play:</h1>
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <button type="submit" className="lobbyBttns">
-            Submit
+            Login
           </button>
         </form>
       </div>
