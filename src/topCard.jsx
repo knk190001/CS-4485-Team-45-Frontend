@@ -142,7 +142,9 @@ export default function Top() {
 function getImageForCard(card) {
   const thisType = card.type;
   const thisColor = card.color;
-
+  if (card.num === 99) {
+    return wild
+  }
   if (thisType==="WILD") {
     return wild;
   } else {

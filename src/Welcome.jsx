@@ -2,26 +2,35 @@ import React, { useContext, useState } from "react";
 import logo from "./logo.png";
 import { useNavigate } from "react-router-dom";
 import { PrefixContext } from "./index.jsx";
+import {usePlayerState} from "./cardImgs/PlayerNameRoot.jsx";
 
 export default function Welcome() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const prefix = useContext(PrefixContext);
     const navigate = useNavigate();
+    const playerState = usePlayerState();
 
     const handleLogin = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await fetch(`${prefix}/api/login/${username}/${password}`, {
+            /*const response = await fetch(`${prefix}/api/login/${username}/${password}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+            });*/
+            const response = await fetch(`${prefix}/api/lobby/join/${username}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
             });
             if (response.ok) {
                 // Assuming the server handles session or token authentication
                 navigate("/lobby");  // Navigate to the lobby upon successful login
+                playerState.setPlayerName(username);
                 console.log("Login successful."); // Log success or handle accordingly
             } else {
                 console.error("Login failed:", response.status);
@@ -51,7 +60,7 @@ export default function Welcome() {
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        required
+
                     />
                     <button type="submit" className="lobbyBttns">
                         Login

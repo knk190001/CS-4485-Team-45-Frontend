@@ -22,7 +22,7 @@ export default function LiveFeed() {
             (gamestate || { actions:[]} ).actions.reverse().map((actionRecord, index) => {
                 switch (actionRecord.action) {
                     case "PLAYED":
-                        return <h2 key={index}>{playerString(actionRecord.username)} played a {actionRecord.card.color.toLowerCase()} {actionRecord.card.num}</h2>
+                        return <h2 key={index}>{playerString(actionRecord.username)} played a {actionRecord.card.color.toLowerCase()} {actionRecord.card.num - 1}</h2>
                     case "DREW":
                       return <h2 key={index}>{playerString(actionRecord.username)} drew a card</h2>
                     case "SKIPPED":
