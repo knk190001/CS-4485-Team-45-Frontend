@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useMemo, useContext} from "react";
+import React, { useState, useEffect } from "react";
+import WildColor from "./WildColorPopup.jsx";
 
 import blue0 from "./cardImgs/blue-0-card-clipart-md.png";
 import blue1 from "./cardImgs/blue-1-card-clipart-md.png";
@@ -57,174 +58,211 @@ import yellow9 from "./cardImgs/yellow-9-card-clipart-md.png";
 import yellowDraw2 from "./cardImgs/yellow-draw-two-card-clipart-md.png";
 import yellowrev from "./cardImgs/yellow-reverse-card-clipart-md.png";
 import yellowskip from "./cardImgs/yellow-skip-card-clipart-md.png";
-import {useGameState} from "./GameStateRoot.jsx";
-import {usePlayerName} from "./cardImgs/PlayerNameRoot.jsx";
-import {PrefixContext} from "./index.jsx";
-
-const redCards = [
-  red0,
-  red1,
-  red2,
-  red3,
-  red4,
-  red5,
-  red6,
-  red7,
-  red8,
-  red9,
-  redDraw2, // index 10: Draw two
-  redrev, // index 11: Reverse
-  redskip, // index 12: Skip
-];
-
-const blueCards = [
-  blue0,
-  blue1,
-  blue2,
-  blue3,
-  blue4,
-  blue5,
-  blue6,
-  blue7,
-  blue8,
-  blue9,
-  blueDraw2, // index 10: Draw two
-  bluerev, // index 11: Reverse
-  blueskip, // index 12: Skip
-];
-
-const greenCards = [
-  green0,
-  green1,
-  green2,
-  green3,
-  green4,
-  green5,
-  green6,
-  green7,
-  green8,
-  green9,
-  greenDraw2, // index 10: Draw two
-  greenrev, // index 11: Reverse
-  greenskip, // index 12: Skip
-];
-
-const yellowCards = [
-  yellow0,
-  yellow1,
-  yellow2,
-  yellow3,
-  yellow4,
-  yellow5,
-  yellow6,
-  yellow7,
-  yellow8,
-  yellow9,
-  yellowDraw2, // index 10: Draw two
-  yellowrev, // index 11: Reverse
-  yellowskip, // index 12: Skip
-];
 
 export default function Hand() {
-  // const [cards, setCards] = useState([]);
-  const playerName = usePlayerName();
-  const gamestate = useGameState();
-  const prefix = useContext(PrefixContext);
+  const [cards, setCards] = useState([]);
+  const [selectedCardId, setSelectedCardId] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [gameState, setGameState] = useState(null); // New state to hold game state
 
-  const cards = useMemo(() => {
-    if(gamestate === null) {return [];}
-    const players = gamestate.players;
-    let current = null;
-    players.forEach(player => {
-      if(player.username === playerName){
-        current = player;
+  useEffect(() => {
+    fetchGameState();
+  }, []);
+
+  const fetchGameState = async () => {
+    try {
+      const response = await fetch("/game/getGameState", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const gameState = await response.json();
+        setGameState(gameState); // Save game state
+        const currentPlayer = gameState.currentPlayer;
+        if (currentPlayer && currentPlayer.hand) {
+          setCards(currentPlayer.hand);
+        }
+      } else {
+        console.error("Failed to fetch the game state:", response.status);
       }
-    });
-    return current.hand;
-  }, [gamestate, playerName]);
+    } catch (error) {
+      console.error("Error fetching game state:", error);
+    }
+  };
 
-  return <div id="theirHand">
-    {cards.map((card, index) => <button
-        key={index}
-        className="handCards"
-        title="play card"
-        onClick={() => playCard(card.id)}
-      >
-        <img src={getImageForCard(card)} width={100} />
-      </button>)}
-  </div>;
+  const playCard = async (cardId) => {
+    if (gameState.currentPlayer.id === currentPlayerId) {
+      // Check if it's current player's turn
+      if (cards[cardId].type === "WILD") {
+        setSelectedCardId(cardId);
+      } else {
+        await playCardWithColor(cardId, null);
+      }
+    } else {
+      console.log("It's not your turn!");
+    }
+  };
 
-  // when card clicked, connects to playcard endpoint in backend
-  async function playCard(cardId) {
-    const response = await fetch(`${prefix}/api/game/playCard/${cardId}`, {
+  const playCardWithColor = async (cardId, color) => {
+    const response = await fetch(`/game/playCard/${cardId}/${color}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // If you need to send additional data in the request body, you can do so here
-      // body: JSON.stringify({ color: "red" }), // Example: specifying a color
     });
     if (response.ok) {
       const gameState = await response.json();
       // Handle the updated game state if needed
+      fetchGameState();
     } else {
       console.error("Failed to play card:", response.status);
     }
-  }
+  };
+
+  const handleColorSelected = async (color) => {
+    setSelectedColor(color);
+    await playCardWithColor(selectedCardId, color);
+    setSelectedCardId(null);
+    setSelectedColor(null);
+  };
+
+  return (
+    <div id="theirHand">
+      {cards.map((card, index) => (
+        <button
+          key={index}
+          className="handCards"
+          title="play card"
+          onClick={() => playCard(index)}
+        >
+          <img src={getImageForCard(card)} width={100} />
+        </button>
+      ))}
+      {selectedCardId !== null && (
+        <WildColor onColorSelected={handleColorSelected} />
+      )}
+    </div>
+  );
 
   // Helper function to get image based on card data
   function getImageForCard(card) {
     const thisType = card.type;
     const thisColor = card.color;
 
-    if (thisType ==="WILD") {
+    if (thisType.isEqual(WILD)) {
       return wild;
     } else {
-      if (thisColor==="RED") {
-        if (thisType==="NUM") {
-          const index = card.num;
+      if (thisColor.isEqual(RED)) {
+        if (thisType.isEqual(NUM)) {
+          const index = card.getNum();
           return redCards[index];
-        } else if (thisType==="SKIP") {
+        } else if (thisType.isEqual(SKIP)) {
           return redCards[12];
-        } else if (thisType==="REVERSE") {
+        } else if (thisType.isEqual(REVERSE)) {
           return redCards[11];
-        } else if (thisType==="DRAW_TWO") {
-          return redCards[10];
+        } else if (thisType.isEqual(DRAW_TWO)) {
+          return redCard[10];
         }
-      } else if (thisColor==="BLUE") {
-        if (thisType==="NUM") {
-          const index = card.num;
+      } else if (thisColor.isEqual(BLUE)) {
+        if (thisType.isEqual(NUM)) {
+          const index = card.getNum();
           return blueCards[index];
-        } else if (thisType==="SKIP") {
+        } else if (thisType.isEqual(SKIP)) {
           return blueCards[12];
-        } else if (thisType==="REVERSE") {
+        } else if (thisType.isEqual(REVERSE)) {
           return blueCards[11];
-        } else if (thisType==="DRAW_TWO") {
-          return blueCards[10];
+        } else if (thisType.isEqual(DRAW_TWO)) {
+          return blueCard[10];
         }
-      } else if (thisColor==="GREEN") {
-        if (thisType==="NUM") {
-          const index = card.num;
+      } else if (thisColor.isEqual(GREEN)) {
+        if (thisType.isEqual(NUM)) {
+          const index = card.getNum();
           return greenCards[index];
-        } else if (thisType==="SKIP") {
+        } else if (thisType.isEqual(SKIP)) {
           return greenCards[12];
-        } else if (thisType==="REVERSE") {
+        } else if (thisType.isEqual(REVERSE)) {
           return greenCards[11];
-        } else if (thisType==="DRAW_TWO") {
-          return greenCards[10];
+        } else if (thisType.isEqual(DRAW_TWO)) {
+          return greenCard[10];
         }
-      } else if (thisColor==="YELLOW") {
-        if (thisType==="NUM") {
-          const index = card.num;
+      } else if (thisColor.isEqual(YELLOW)) {
+        if (thisType.isEqual(NUM)) {
+          const index = card.getNum();
           return yellowCards[index];
-        } else if (thisType==="SKIP") {
+        } else if (thisType.isEqual(SKIP)) {
           return yellowCards[12];
-        } else if (thisType==="REVERSE") {
+        } else if (thisType.isEqual(REVERSE)) {
           return yellowCards[11];
-        } else if (thisType==="DRAW_TWO") {
-          return yellowCards[10];
+        } else if (thisType.isEqual(DRAW_TWO)) {
+          return yellowCard[10];
         }
       }
     }
+
+    const redCards = [
+      red0,
+      red1,
+      red2,
+      red3,
+      red4,
+      red5,
+      red6,
+      red7,
+      red8,
+      red9,
+      redDraw2, // index 10: Draw two
+      redrev, // index 11: Reverse
+      redskip, // index 12: Skip
+    ];
+
+    const blueCards = [
+      blue0,
+      blue1,
+      blue2,
+      blue3,
+      blue4,
+      blue5,
+      blue6,
+      blue7,
+      blue8,
+      blue9,
+      blueDraw2, // index 10: Draw two
+      bluerev, // index 11: Reverse
+      blueskip, // index 12: Skip
+    ];
+
+    const greenCards = [
+      green0,
+      green1,
+      green2,
+      green3,
+      green4,
+      green5,
+      green6,
+      green7,
+      green8,
+      green9,
+      greenDraw2, // index 10: Draw two
+      greenrev, // index 11: Reverse
+      greenskip, // index 12: Skip
+    ];
+
+    const yellowCards = [
+      yellow0,
+      yellow1,
+      yellow2,
+      yellow3,
+      yellow4,
+      yellow5,
+      yellow6,
+      yellow7,
+      yellow8,
+      yellow9,
+      yellowDraw2, // index 10: Draw two
+      yellowrev, // index 11: Reverse
+      yellowskip, // index 12: Skip
+    ];
   }
 }
