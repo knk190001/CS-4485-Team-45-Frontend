@@ -74,17 +74,17 @@ function Leaderboard() {
           <tr>
             <td>1</td>
             <td>Keith</td>
-            <td>1</td>
+            <td>7</td>
           </tr>
           <tr>
             <td>2</td>
             <td>Keshav</td>
-            <td>0</td>
+            <td>4</td>
           </tr>
           <tr>
             <td>3</td>
             <td>Emmanuel</td>
-            <td>0</td>
+            <td>2</td>
           </tr>
           <tr>
             <td>4</td>
