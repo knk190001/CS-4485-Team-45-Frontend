@@ -10,7 +10,7 @@ function Leaderboard() {
 
   const fetchLeaderboardData = async () => {
     try {
-      const response = await fetch("/game/getWins");
+      const response = await fetch("/api/game/getWins");
       const data = await response.json();
       // Assuming the response data is a HashMap with player names as keys and win counts as values
       const leaderboardArray = convertHashMapToArray(data); // Convert HashMap to array
