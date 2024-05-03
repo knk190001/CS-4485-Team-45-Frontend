@@ -12,11 +12,17 @@ function Leaderboard() {
     try {
       const response = await fetch("/game/getWins");
       const data = await response.json();
-      // Assuming the response data is an array of objects with player names and win counts
-      setLeaderboardData(data);
+      // Assuming the response data is a HashMap with player names as keys and win counts as values
+      const leaderboardArray = convertHashMapToArray(data); // Convert HashMap to array
+      setLeaderboardData(leaderboardArray);
     } catch (error) {
       console.error("Error fetching leaderboard data:", error);
     }
+  };
+
+  // Function to convert HashMap to array of objects
+  const convertHashMapToArray = (data) => {
+    return Object.entries(data).map(([name, wins]) => ({ name, wins }));
   };
 
   return (
